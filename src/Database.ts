@@ -6,8 +6,8 @@ export class Database {
     private db: Db;
 
     constructor() {
-        const {DB_HOST, DB_USER, DB_PASSWORD, DB_NAME} = process.env;
-        this.url = `mongodb://${encodeURIComponent(DB_USER)}:${encodeURIComponent(DB_PASSWORD)}@${DB_HOST}:27017/${DB_NAME}`;
+        const {DB_HOST, DB_NAME} = process.env;
+        this.url = `mongodb://${DB_HOST}:27017/${DB_NAME}`;
     }
 
     public async connect() {
