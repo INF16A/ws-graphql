@@ -4,7 +4,7 @@ services:
     image: r.patrick246.de/dhbw/ws-graphql:latest
     build: .
     ports:
-      - "3001:3000"
+      - "8082:3000"
     links:
       - "db:db"
   db:
@@ -13,7 +13,5 @@ services:
       - mongo.env
     volumes:
       - "db-data:/data/db"
-    ports:
-      - 27017:27017
 volumes:
   db-data:
