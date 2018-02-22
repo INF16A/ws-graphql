@@ -1,0 +1,21 @@
+type Contact {
+    name: String,
+    email: String,
+    phone: String
+}
+
+type Address {
+    street: String,
+    plz: String,
+    town: String,
+    lat: Float,
+    long: Float
+}
+
+type Company {
+    id: String!,
+    name: String!,
+    contact: Contact,
+    address: Address,
+    description: String
+}

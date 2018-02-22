@@ -3,3 +3,9 @@ services:
   db:
     ports:
       - "27017:27017"
+  db-admin:
+    image: mongo-express
+    links:
+      - db:mongo
+    ports:
+      - "127.0.0.1:8089:8081"

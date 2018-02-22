@@ -1,0 +1,12 @@
+input CompanyInput {
+    name: String,
+    contactName: String,
+    contactEmail: String,
+    contactPhone: String,
+    username: String,
+    password: String,
+    addressStreet: String,
+    addressPLZ: String,
+    addressTown: String,
+    description: String
+}

@@ -6,7 +6,7 @@ import "source-map-support/register";
 import * as express from "express";
 import {Application} from "express";
 import * as graphqlHTTP from "express-graphql";
-import {QueryResolver} from "./resolver/Query";
+import {createRootResolver} from "./resolver/Query";
 import {buildSchema} from "graphql";
 import {schemas} from "./schema";
 import {Database} from "./Database";
@@ -28,7 +28,7 @@ const db: Database = new Database();
 
     app.use('/graphql', graphqlHTTP({
         schema: buildSchema(schemas),
-        rootValue: QueryResolver,
+        rootValue: createRootResolver(db.getDatabase()),
         graphiql: true
     }));
 

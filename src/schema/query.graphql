@@ -1,3 +1,4 @@
 type Query {
-    hello: Greeting
+    hello: Greeting,
+    companies: [Company]
 }
