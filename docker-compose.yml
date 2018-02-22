@@ -7,6 +7,8 @@ services:
       - "127.0.0.1:8082:3000"
     links:
       - "db:db"
+    env_file:
+      - .env
   db:
     image: aashreys/mongo-auth:latest
     env_file:
