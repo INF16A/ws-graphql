@@ -1,0 +1,33 @@
+{
+  "name": "praktikumsboerse",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc && cp src/schema/*.graphql dist/schema",
+    "start": "node dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/INF16A/ws-graphql.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/INF16A/ws-graphql/issues"
+  },
+  "homepage": "https://github.com/INF16A/ws-graphql#readme",
+  "devDependencies": {
+    "@types/express": "^4.11.1",
+    "@types/graphql": "^0.12.4",
+    "@types/node": "^9.4.6",
+    "typescript": "^2.7.2"
+  },
+  "dependencies": {
+    "@types/express-graphql": "0.0.36",
+    "express": "^4.16.2",
+    "express-graphql": "^0.6.12",
+    "graphql": "^0.13.1"
+  }
+}

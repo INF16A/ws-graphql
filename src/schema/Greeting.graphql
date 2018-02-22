@@ -1,0 +1,4 @@
+type Greeting {
+    word: String!,
+    recipient: String!
+}

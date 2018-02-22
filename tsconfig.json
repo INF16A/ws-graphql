@@ -1,0 +1,19 @@
+{
+	"compilerOptions": {
+		"module": "commonjs",
+		"outDir": "dist",
+		"target": "es6",
+		"sourceMap": true,
+		"alwaysStrict": true,
+		"lib": [
+			"es6",
+			"esnext.asynciterable"
+		]
+	},
+	"include": [
+		"src/**/*"
+	],
+	"exclude": [
+		"node_modules"
+	]
+}
