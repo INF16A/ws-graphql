@@ -6,7 +6,7 @@ import "source-map-support/register";
 import * as express from "express";
 import {Application} from "express";
 import * as graphqlHTTP from "express-graphql";
-import {createRootResolver} from "./resolver/Query";
+import {createRootResolver} from "./resolver/RootResolver";
 import {buildSchema} from "graphql";
 import {schemas} from "./schema";
 import {Database} from "./Database";
