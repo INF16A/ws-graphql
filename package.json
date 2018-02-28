@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc && cp src/schema/*.graphql dist/schema",
+    "build:windows": "tsc && echo Please copy the .graphql files to dist/schema && pause",
     "start": "node dist/index.js"
   },
   "repository": {
