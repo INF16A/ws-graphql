@@ -13,6 +13,7 @@ import {Database} from "./Database";
 import {authenticate} from "./authentication/authentication";
 import bodyParser = require("body-parser");
 import {authenticationRouter} from "./authentication/endpoint";
+import {maskErrors} from "graphql-errors";
 
 
 const app: Application = express();
@@ -26,6 +27,7 @@ const db: Database = new Database();
     app.use(authenticate);
     app.use(authenticationRouter);
 
+    maskErrors(schemas);
     app.use('/graphql', graphqlHTTP({
         schema: buildSchema(schemas),
         rootValue: createRootResolver(db.getDatabase()),

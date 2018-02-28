@@ -2,7 +2,18 @@ import {Db} from "mongodb";
 import {hash} from "bcryptjs";
 import {Company} from "./Company";
 
+import {UserError} from "graphql-errors";
+
+const doesUserExist = async (db: Db, username: string): Promise<boolean> => {
+    let user = await db.collection('User').findOne({username});
+    return user !== null;
+};
+
 export const registerCompanyResolver = (db: Db) => async ({input}) => {
+    if(await doesUserExist(db, input.username)) {
+        throw new UserError("A user with this username already exists");
+    }
+
     const pwHash = await hash(input.password, 10);
 
     const doc = {
@@ -20,7 +31,8 @@ export const registerCompanyResolver = (db: Db) => async ({input}) => {
             phone: input.contactPhone
         },
         username: input.username,
-        password: pwHash
+        password: pwHash,
+        verified: false
     };
 
     let result = await db.collection('User').insertOne(doc);

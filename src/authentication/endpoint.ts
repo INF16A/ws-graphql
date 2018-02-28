@@ -36,6 +36,17 @@ authenticationRouter.post('/authenticate', async (req, res) => {
             return;
         }
 
+        if(!("verified" in user) || !user.verified) {
+            res.status(403).json({
+                error: {
+                    type: "Authentication",
+                    cause: "verificationstate",
+                    message: "User Mail not verified. Please verify before logging in."
+                }
+            });
+            return;
+        }
+
         const passwordValid: boolean = bcrypt.compare(password, user.password);
 
         if(!passwordValid) {

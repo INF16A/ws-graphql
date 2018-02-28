@@ -14,6 +14,12 @@ export class Database {
         this.client = await MongoClient.connect(this.url);
 
         this.db = this.client.db(process.env.DB_NAME);
+
+        await this.setup();
+    }
+
+    public async setup() {
+        await this.db.collection('User').createIndex({username: 1}, {unique: true});
     }
 
     public getDatabase(): Db {
