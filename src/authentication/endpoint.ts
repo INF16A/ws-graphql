@@ -9,7 +9,30 @@ const JWT_SECRET = Buffer.from(process.env.JWT_SECRET, 'base64');
 
 authenticationRouter.post('/authenticate', async (req, res) => {
     const {username, password} = req.body;
-    console.log(req.body);
+    if(!validateRequest(username, password, res))
+        return;
+
+    const db: Database = req.app.locals.db;
+    try {
+        const user = await getUser(username, db);
+
+        if(!validateUser(user, res))
+            return;
+        if(!validateUserVerification(user, res))
+            return;
+        if(!validatePassword(user, password, res))
+            return;
+        await sendToken(user, res);
+    } catch (err) {
+        console.log(err);
+    }
+});
+
+async function getUser(username, db) {
+    return await db.getDatabase().collection('User').findOne({username: username});
+}
+
+function validateRequest(username, password, res) {
     if(username === undefined || password === undefined) {
         res.status(400).json({
             error: {
@@ -18,48 +41,57 @@ authenticationRouter.post('/authenticate', async (req, res) => {
                 message: 'Username or password missing'
             }
         });
-        return;
+        return false;
     }
+    return true;
+}
 
-    const db: Database = req.app.locals.db;
-    try {
-        const user = await db.getDatabase().collection('User').findOne({username: username});
+function validateUser(user, res) {
+    if(!user) {
+        res.status(403).json({
+            error: {
+                type: "Authentication",
+                cause: "credentials",
+                message: "Username invalid"
+            }
+        });
+        return false;
+    }
+    return true;
+}
 
-        if(!user) {
-            res.status(403).json({
-                error: {
-                    type: "Authentication",
-                    cause: "credentials",
-                    message: "Username invalid"
-                }
-            });
-            return;
-        }
+function validateUserVerification(user, res) {
+    if(!("verified" in user) || !user.verified) {
+        res.status(403).json({
+            error: {
+                type: "Authentication",
+                cause: "verificationstate",
+                message: "User Mail not verified. Please verify before logging in."
+            }
+        });
+        return false;
+    }
+    return true;
+}
 
-        if(!("verified" in user) || !user.verified) {
-            res.status(403).json({
-                error: {
-                    type: "Authentication",
-                    cause: "verificationstate",
-                    message: "User Mail not verified. Please verify before logging in."
-                }
-            });
-            return;
-        }
+async function validatePassword(user, password, res) {
+    const passwordValid: boolean = await bcrypt.compare(password, user.password);
 
-        const passwordValid: boolean = bcrypt.compare(password, user.password);
+    if(!passwordValid) {
+        res.status(403).json({
+            error: {
+                type: "Authentication",
+                cause: "credentials",
+                message: "Password wrong"
+            }
+        });
+        return false;
+    }
+    return true;
+}
 
-        if(!passwordValid) {
-            res.status(403).json({
-                error: {
-                    type: "Authentication",
-                    cause: "credentials",
-                    message: "Password wrong"
-                }
-            });
-            return;
-        }
-
+function sendToken(user, res) {
+    return new Promise((resolve, reject) => {
         sign({
             username: user.username
         }, JWT_SECRET, {
@@ -68,18 +100,24 @@ authenticationRouter.post('/authenticate', async (req, res) => {
             expiresIn: "30min"
         }, (err, encoded) => {
             if(err) {
-                console.log(err);
-                return;
+                return reject(err);
             }
-
-            res.setHeader('X-Next-Token', encoded);
-            res.status(200).json({
-                "data": {
-                    "token": encoded
-                }
-            });
+            resolve(encoded);
         });
-    } catch (err) {
+    }).then(encoded => {
+        res.setHeader('X-Next-Token', encoded);
+        res.status(200).json({
+            "data": {
+                "token": encoded
+            }
+        });
+    }).catch(err => {
         console.log(err);
-    }
-});
+        res.status(500).json({
+            error: {
+                type: "Internal"
+            }
+        })
+    });
+}
+
