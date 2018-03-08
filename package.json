@@ -27,6 +27,7 @@
     "@types/jsonwebtoken": "^7.2.5",
     "@types/mongodb": "^3.0.5",
     "@types/node": "^9.4.6",
+    "@types/nodemailer": "^4.3.4",
     "typescript": "^2.7.2"
   },
   "dependencies": {
@@ -40,6 +41,7 @@
     "graphql-errors": "^2.1.0",
     "jsonwebtoken": "^8.1.1",
     "mongodb": "^3.0.2",
+    "nodemailer": "^4.6.2",
     "source-map-support": "^0.5.3"
   }
 }

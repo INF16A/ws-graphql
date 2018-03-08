@@ -14,29 +14,40 @@ import {authenticate} from "./authentication/authentication";
 import bodyParser = require("body-parser");
 import {authenticationRouter} from "./authentication/endpoint";
 import {maskErrors} from "graphql-errors";
+import {Mail} from "./Mail";
+import {validationRouter} from "./authentication/emailValidation";
 
+console.log('[Startup] Starting prakt-backend');
 
 const app: Application = express();
 const db: Database = new Database();
+const mail: Mail = new Mail();
 
 (async () => {
-    await db.connect();
+    console.log('[Startup] Setting up Database and Mail connection');
+    await Promise.all([
+        db.connect().then(() => console.log('[Startup] Database connected')),
+        mail.connect().then(() => console.log('[Startup] Mail connected'))
+    ]);
+    console.log('[Startup] Connection setup successfully');
 
+    console.log('[Startup] Setting up Web API');
     app.locals.db  = db;
     app.use(bodyParser.json());
     app.use(authenticate);
     app.use(authenticationRouter);
+    app.use(validationRouter);
 
     maskErrors(schemas);
     app.use('/graphql', graphqlHTTP({
         schema: buildSchema(schemas),
-        rootValue: createRootResolver(db.getDatabase()),
+        rootValue: createRootResolver(db.getDatabase(), mail),
         graphiql: true
     }));
 
-    app.listen(3000, () => console.log('Express listening'));
+    app.listen(3000, () => console.log('[Startup] Web API setup complete'));
 
 })().catch(err => {
-    console.error(err);
+    console.error(`Error: ${err}`);
 });
 
