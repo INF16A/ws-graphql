@@ -1,0 +1,14 @@
+version: '3'
+services:
+  api:
+    ports:
+      - "8083:3000"
+  db:
+    ports:
+      - "27017:27017"
+  db-admin:
+    image: mongo-express
+    links:
+      - db:mongo
+    ports:
+      - "8089:8081"
