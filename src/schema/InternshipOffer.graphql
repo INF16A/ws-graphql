@@ -1,0 +1,8 @@
+
+input InternshipOffer {
+    jobname:String,
+    link:String,
+    location:Address,
+    contact:Contact,
+    description:String
+}

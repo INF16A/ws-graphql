@@ -1,4 +1,5 @@
 type Query {
     hello: Greeting,
-    companies: [Company]
+    companies: [Company],
+    internshipOffers:[InternshipOffer],
 }

@@ -1,4 +1,4 @@
-input InternshipOffer{
+input InternshipOfferInput {
     jobname:String,
     link:String,
     description:String,
@@ -7,5 +7,5 @@ input InternshipOffer{
     addressTown: String,
     contactName: String,
     contactEmail: String,
-    contactPhone: String,
+    contactPhone: String
 }
