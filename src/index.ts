@@ -16,6 +16,7 @@ import {authenticationRouter} from "./authentication/endpoint";
 import {maskErrors} from "graphql-errors";
 import {Mail} from "./Mail";
 import {validationRouter} from "./authentication/emailValidation";
+import * as cors from "cors";
 
 console.log('[Startup] Starting prakt-backend');
 
@@ -33,6 +34,8 @@ const mail: Mail = new Mail();
 
     console.log('[Startup] Setting up Web API');
     app.locals.db  = db;
+
+    app.use(cors());
     app.use(bodyParser.json());
     app.use(authenticate);
     app.use(authenticationRouter);
