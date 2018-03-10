@@ -1,4 +1,4 @@
-input InternshipOffer{
+input InternshipOfferInput {
     jobname:String,
     link:String,
     description:String,
