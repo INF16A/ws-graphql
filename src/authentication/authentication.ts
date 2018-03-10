@@ -1,15 +1,15 @@
 import {NextFunction, Request, RequestHandler, Response} from "express";
 import {JsonWebTokenError, NotBeforeError, sign, TokenExpiredError, verify} from "jsonwebtoken";
 
-console.error('Hello world');
-console.log(process.env);
-console.log(process.env.JWT_SECRET);
-console.log(process.env.JWT_SECRET);
+if(process.env.JWT_SECRET===undefined){
+    console.log("EMPTY:" + process.env.JWT_SECRET);
+    process.env.JWT_SECRET='m8rVNIqQ0f0pbsdYhJ9lFQ==';
+    console.log(process.env.JWT_SECRET);
+}
 
 const JWT_SECRET = Buffer.from(process.env.JWT_SECRET, 'base64');
 
 export const authenticate: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
-    console.error("1:"+process.env);
     const token = extractToken(req.header('Authorization'));
     if (token === null) {
         return next();
