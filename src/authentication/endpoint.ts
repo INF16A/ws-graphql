@@ -9,18 +9,18 @@ const JWT_SECRET = Buffer.from(process.env.JWT_SECRET, 'base64');
 
 authenticationRouter.post('/authenticate', async (req, res) => {
     const {username, password} = req.body;
-    if(!validateRequest(username, password, res))
+    if (!validateRequest(username, password, res))
         return;
 
     const db: Database = req.app.locals.db;
     try {
         const user = await getUser(username, db);
 
-        if(!validateUser(user, res))
+        if (!validateUser(user, res))
             return;
-        if(!validateUserVerification(user, res))
+        if (!validateUserVerification(user, res))
             return;
-        if(!validatePassword(user, password, res))
+        if (!validatePassword(user, password, res))
             return;
         await sendToken(user, res);
     } catch (err) {
@@ -33,7 +33,7 @@ async function getUser(username, db) {
 }
 
 function validateRequest(username, password, res) {
-    if(username === undefined || password === undefined) {
+    if (username === undefined || password === undefined) {
         res.status(400).json({
             error: {
                 type: 'Authentication',
@@ -47,7 +47,7 @@ function validateRequest(username, password, res) {
 }
 
 function validateUser(user, res) {
-    if(!user) {
+    if (!user) {
         res.status(403).json({
             error: {
                 type: "Authentication",
@@ -61,7 +61,7 @@ function validateUser(user, res) {
 }
 
 function validateUserVerification(user, res) {
-    if(!("verified" in user) || !user.verified) {
+    if (!("verified" in user) || !user.verified) {
         res.status(403).json({
             error: {
                 type: "Authentication",
@@ -77,7 +77,7 @@ function validateUserVerification(user, res) {
 async function validatePassword(user, password, res) {
     const passwordValid: boolean = await bcrypt.compare(password, user.password);
 
-    if(!passwordValid) {
+    if (!passwordValid) {
         res.status(403).json({
             error: {
                 type: "Authentication",
@@ -99,7 +99,7 @@ function sendToken(user, res) {
             subject: user._id.toString(),
             expiresIn: "30min"
         }, (err, encoded) => {
-            if(err) {
+            if (err) {
                 return reject(err);
             }
             resolve(encoded);

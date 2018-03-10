@@ -10,7 +10,7 @@ const doesUserExist = async (db: Db, username: string): Promise<boolean> => {
 };
 
 export const registerCompanyResolver = (db: Db) => async ({input}) => {
-    if(await doesUserExist(db, input.username)) {
+    if (await doesUserExist(db, input.username)) {
         throw new UserError("A user with this username already exists");
     }
 
