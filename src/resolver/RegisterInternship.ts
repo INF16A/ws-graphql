@@ -1,5 +1,10 @@
 import {Db} from "mongodb";
-import {InternshipOffer} from "./InternshipOffer";
+import {InternshipOffer} from "../schema/InternshipOffer";
+
+export const internshipResolver = async (db: Db) => {
+    const internshipOffers = await db.collection('Internships').find({}).toArray();
+    return internshipOffers.map(internshipOffer => new InternshipOffer(internshipOffer));
+};
 
 export const registerInternshipResolver = (db: Db) => async ({input}) => {
     const doc = {
