@@ -61,7 +61,7 @@ function validateUser(user, res) {
 }
 
 function validateUserVerification(user, res) {
-    if(!("verified" in user) || !user.verified) {
+    if(!("validation" in user) || !user.validation.verified) {
         res.status(403).json({
             error: {
                 type: "Authentication",
