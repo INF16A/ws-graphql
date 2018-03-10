@@ -1,5 +1,4 @@
-
-input InternshipOffer {
+type InternshipOffer {
     jobname:String,
     link:String,
     location:Address,
