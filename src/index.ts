@@ -19,7 +19,6 @@ import {validationRouter} from "./authentication/emailValidation";
 import * as cors from "cors";
 import {buildContext} from "./Context";
 
-console.log('[Startup] Starting prakt-backend');
 
 const app: Application = express();
 const db: Database = new Database();
