@@ -12,3 +12,7 @@ services:
       - db:mongo
     ports:
       - "8089:8081"
+  graphiql:
+      image: vitalcode/auth-graphiql:master
+      ports:
+        - "8088:3000"
