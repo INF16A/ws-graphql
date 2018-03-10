@@ -1,4 +1,6 @@
 import {config} from "dotenv";
+config();
+
 import "source-map-support/register";
 
 import * as express from "express";
@@ -9,12 +11,9 @@ import {buildSchema} from "graphql";
 import {schemas} from "./schema";
 import {Database} from "./Database";
 import {authenticate} from "./authentication/authentication";
+import bodyParser = require("body-parser");
 import {authenticationRouter} from "./authentication/endpoint";
 import {maskErrors} from "graphql-errors";
-
-config();
-
-import bodyParser = require("body-parser");
 
 
 const app: Application = express();
@@ -23,7 +22,7 @@ const db: Database = new Database();
 (async () => {
     await db.connect();
 
-    app.locals.db = db;
+    app.locals.db  = db;
     app.use(bodyParser.json());
     app.use(authenticate);
     app.use(authenticationRouter);
