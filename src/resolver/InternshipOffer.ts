@@ -1,9 +1,9 @@
 import {Db} from "mongodb";
-import {Address, Contact} from "../resolver/Company";
+import {Address, Contact} from "./Company";
 
-export const InternshipOfferResolver = async (db: Db) => {
-    const offers = await db.collection('InternshipOffers').find();
-    return offers.map(offer => new InternshipOffer(offer));
+export const internshipOfferResolver = async (db: Db) => {
+    const internshipOffers = await db.collection('Internships').find({}).toArray();
+    return internshipOffers.map(internshipOffer => new InternshipOffer(internshipOffer));
 };
 
 export class InternshipOffer {
