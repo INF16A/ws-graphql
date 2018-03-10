@@ -6,8 +6,7 @@ export const companyResolver = async (db: Db) => {
 };
 
 export class Company {
-    constructor(private data: any) {
-    }
+    constructor(private data: any) {}
 
     contact(): Contact {
         return new Contact(this.data.contact);
@@ -31,8 +30,7 @@ export class Company {
 }
 
 export class Contact {
-    constructor(private data: any) {
-    }
+    constructor(private data: any) {}
 
     name() {
         return this.data.name;
@@ -48,8 +46,7 @@ export class Contact {
 }
 
 export class Address {
-    constructor(private data: any) {
-    }
+    constructor(private data: any) {}
 
     street() {
         return this.data.street;
