@@ -9,6 +9,7 @@ import {internshipOfferResolver} from "./InternshipOffer";
 export const createRootResolver = (db: Db, mail: Mail) => ({
     hello: () => new Greeting(),
     companies: () => companyResolver(db),
+    internshipOffers: () => internshipOfferResolver(db),
     registerInternshipOffer: registerInternshipResolver(db),
     registerCompany: registerCompanyResolver(db, mail)
 });
