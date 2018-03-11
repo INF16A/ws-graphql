@@ -30,5 +30,9 @@ export class InternshipOffer {
         return this.data.link;
     }
 
+    id(): string {
+        return this.data._id;
+    }
+
 
 }
