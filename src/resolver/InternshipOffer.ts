@@ -1,13 +1,21 @@
 import {Db} from "mongodb";
-import {Address, Contact} from "./Company";
+import {Address, Company, Contact} from "./Company";
+import {companyRepository} from "./CompanyRepository";
 
 export const internshipOfferResolver = async (db: Db) => {
     const internshipOffers = await db.collection('Internships').find({}).toArray();
-    return internshipOffers.map(internshipOffer => new InternshipOffer(internshipOffer));
+    return internshipOffers.map(internshipOffer => {
+        internshipOffer.company = companyRepository.getCompanyById(db, internshipOffer.company);
+        new InternshipOffer(internshipOffer)
+    });
 };
 
 export class InternshipOffer {
     constructor(private  data: any) {
+    }
+
+    company(): Company {
+        return this.data.company;
     }
 
     contact(): Contact {
