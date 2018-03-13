@@ -7,5 +7,6 @@ input InternshipOfferInput {
     addressTown: String,
     contactName: String,
     contactEmail: String,
-    contactPhone: String
+    contactPhone: String,
+    companyId: String,
 }
