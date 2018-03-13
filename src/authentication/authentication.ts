@@ -20,7 +20,7 @@ export const authenticate: RequestHandler = (req: Request, res: Response, next: 
         console.log(decoded);
         const tokenData = decoded as any;
 
-        res.locals.user = decoded;
+        (req as any).user = decoded;
 
         sign({username: tokenData.username}, JWT_SECRET, {issuer: 'prakt-graphql', subject: tokenData.sub, expiresIn: '30min'}, (err, newToken) => {
             if(err) {

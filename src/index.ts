@@ -17,6 +17,7 @@ import {maskErrors} from "graphql-errors";
 import {Mail} from "./Mail";
 import {validationRouter} from "./authentication/emailValidation";
 import * as cors from "cors";
+import {buildContext} from "./Context";
 
 console.log('[Startup] Starting prakt-backend');
 
@@ -42,11 +43,12 @@ const mail: Mail = new Mail();
     app.use(validationRouter);
 
     maskErrors(schemas);
-    app.use('/graphql', graphqlHTTP({
+    app.use('/graphql', graphqlHTTP(request => ({
         schema: buildSchema(schemas),
         rootValue: createRootResolver(db.getDatabase(), mail),
-        graphiql: true
-    }));
+        graphiql: true,
+        context: buildContext(mail, db, request)
+    })));
 
     app.listen(3000, () => console.log('[Startup] Web API setup complete'));
 

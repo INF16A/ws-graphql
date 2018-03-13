@@ -5,7 +5,7 @@ import {registerCompanyResolver} from "./RegisterCompany";
 import {Mail} from "../Mail";
 
 export const createRootResolver = (db: Db, mail: Mail) => ({
-    hello: () => new Greeting(),
+    hello: (args, ctx) => new Greeting(ctx),
     companies: () => companyResolver(db),
     registerCompany: registerCompanyResolver(db, mail)
 });
