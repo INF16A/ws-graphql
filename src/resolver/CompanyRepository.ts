@@ -1,11 +1,17 @@
 import {Db} from "mongodb";
 import {Company} from "./Company";
 
-class CompanyRepository {
-    public async getCompanyById(db: Db, id: string): Promise<Company> {
-        return new Company(await db.collection('User').find({role: 'company', _id: id}).limit(1));
+export class CompanyRepository {
+    public static async doesCompanyExist(db: Db, id: string): Promise<Boolean> {
+        return null != await db.collection('User').findOne({role: 'company', _id: id});
+    }
 
+    public static async getCompanyById(db: Db, id: string): Promise<{ exists: Boolean, company: Company }> {
+        let data = await db.collection('User').findOne({role: 'company', _id: id});
+        if (data == null) {
+            return {exists: false, company: null};
+        }
+        return {exists: true, company: new Company(data)};
     }
 }
 
-export const companyRepository = new CompanyRepository();
