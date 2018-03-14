@@ -5,12 +5,12 @@ import {registerCompanyResolver} from "./RegisterCompany";
 import {registerInternshipResolver} from "./RegisterInternship";
 import {Mail} from "../Mail";
 import {internshipOfferResolver} from "./InternshipOffer";
+import {CompanyRepository} from "./CompanyRepository";
 
-export const createRootResolver = (db: Db, mail: Mail) => ({
+export const createRootResolver = (db: Db, mail: Mail, companyRepository: CompanyRepository) => ({
     hello: (args, ctx) => new Greeting(ctx),
     companies: () => companyResolver(db),
     registerCompany: registerCompanyResolver(db, mail),
-    registerInternshipOffer: registerInternshipResolver(db),
-        internshipOffers: () => internshipOfferResolver(db),
-    })
+    registerInternshipOffer: (ctx) => registerInternshipResolver(db, ctx, companyRepository),
+    internshipOffers: () => internshipOfferResolver(db, companyRepository),
 });

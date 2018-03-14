@@ -2,12 +2,11 @@ import {Db} from "mongodb";
 import {Company} from "./Company";
 
 export class CompanyRepository {
-    public static async doesCompanyExist(db: Db, id: string): Promise<Boolean> {
-        return null != await db.collection('User').findOne({_id: id});
+    constructor(private readonly db: Db) {
     }
 
-    public static async getCompanyById(db: Db, _id: string): Promise<{ exists: Boolean, company: Company }> {
-        let data = await db.collection('User').findOne({_id});
+    public async getCompanyByUsername(username: string): Promise<{ exists: Boolean, company: Company }> {
+        let data = await this.db.collection('User').findOne({username});
         if (data == null) {
             return {exists: false, company: null};
         }
