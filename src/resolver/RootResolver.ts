@@ -13,4 +13,4 @@ export const createRootResolver = (db: Db, mail: Mail) => ({
     registerInternshipOffer: registerInternshipResolver(db),
         internshipOffers: () => internshipOfferResolver(db),
     })
-;
+});
