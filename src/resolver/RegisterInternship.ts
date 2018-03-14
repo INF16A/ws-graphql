@@ -2,14 +2,16 @@ import {Db} from "mongodb";
 import {InternshipOffer} from "./InternshipOffer";
 import {CompanyRepository} from "./CompanyRepository";
 import {UserError} from "graphql-errors";
+import {Context} from "../Context";
 
-export const registerInternshipResolver = (db: Db) => async ({input}) => {
-
-        const result = await CompanyRepository.getCompanyById(db, input.companyId);
+export const registerInternshipResolver = (db: Db, ctx: Context, repo: CompanyRepository) => async ({input}) => {
+        if (ctx.user == null) {
+            throw  new UserError("Can't register an internship unauthorized");
+        }
+        const result = await repo.getCompanyByUsername(ctx.user.username);
         if (!result.exists) {
             throw new UserError("Can't register an internship for a non-existing company");
         }
-        console.log(result);
         const doc = {
             description: input.description,
             jobname: input.jobname,

@@ -2,10 +2,10 @@ import {Db} from "mongodb";
 import {Address, Company, Contact} from "./Company";
 import {CompanyRepository} from "./CompanyRepository";
 
-export const internshipOfferResolver = async (db: Db) => {
+export const internshipOfferResolver = async (db: Db, companyRepository: CompanyRepository) => {
     const internshipOffers = await db.collection('Internships').find({}).toArray();
     return internshipOffers.map(internshipOffer => {
-        internshipOffer.company = CompanyRepository.getCompanyById(db, internshipOffer.company);
+        internshipOffer.company = companyRepository.getCompanyByUsername(internshipOffer.company);
         return new InternshipOffer(internshipOffer);
     });
 };
