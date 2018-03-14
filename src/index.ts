@@ -1,6 +1,4 @@
 import {config} from "dotenv";
-config();
-
 import "source-map-support/register";
 
 import * as express from "express";
@@ -11,13 +9,17 @@ import {buildSchema} from "graphql";
 import {schemas} from "./schema";
 import {Database} from "./Database";
 import {authenticate} from "./authentication/authentication";
-import bodyParser = require("body-parser");
 import {authenticationRouter} from "./authentication/endpoint";
 import {maskErrors} from "graphql-errors";
 import {Mail} from "./Mail";
 import {validationRouter} from "./authentication/emailValidation";
 import * as cors from "cors";
 import {buildContext} from "./Context";
+import {CompanyRepository} from "./resolver/CompanyRepository";
+
+config();
+
+import bodyParser = require("body-parser");
 
 
 const app: Application = express();
@@ -33,7 +35,7 @@ const mail: Mail = new Mail();
     console.log('[Startup] Connection setup successfully');
 
     console.log('[Startup] Setting up Web API');
-    app.locals.db  = db;
+    app.locals.db = db;
 
     app.use(cors());
     app.use(bodyParser.json());
@@ -44,7 +46,7 @@ const mail: Mail = new Mail();
     maskErrors(schemas);
     app.use('/graphql', graphqlHTTP(request => ({
         schema: buildSchema(schemas),
-        rootValue: createRootResolver(db.getDatabase(), mail),
+        rootValue: createRootResolver(db.getDatabase(), mail, new CompanyRepository(db.getDatabase())),
         graphiql: true,
         context: buildContext(mail, db, request)
     })));
