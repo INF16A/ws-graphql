@@ -1,62 +1,65 @@
-import {Db} from "mongodb";
+import {Company} from "../Domain/Company";
+import {Address} from "../Domain/Address";
+import {Contact} from "../Domain/Contact";
+import {Context} from "../Context";
 
-export const companyResolver = async (db: Db) => {
-    const companies = await db.collection('User').find({role: 'company'}).toArray();
-    return companies.map(c => new Company(c));
+export const companyResolver = async ({}, context: Context) => {
+    const companies = await context.repositoryFactory.getCompanyRepository().getAllCompanies();
+    return companies.map(c => new CompanyView(c));
 };
 
-export class Company {
-    constructor(private data: any) {}
+export class CompanyView {
+    constructor(private company: Company) {}
 
-    contact(): Contact {
-        return new Contact(this.data.contact);
+    contact(): ContactView {
+        return new ContactView(this.company.contact);
     }
 
-    address(): Address {
-        return new Address(this.data.address);
+    address(): AddressView {
+        return new AddressView(this.company.address);
     }
 
     name(): string {
-        return this.data.name;
+        return this.company.name;
     }
 
     id(): string {
-        return this.data._id;
+        return this.company.id;
     }
 
     description() {
-        return this.data.description;
+        return this.company.description;
     }
 }
 
-export class Contact {
-    constructor(private data: any) {}
+export class ContactView {
+    constructor(private contact: Contact) {}
 
     name() {
-        return this.data.name;
+        return this.contact.name;
     }
 
     email() {
-        return this.data.email;
+        return this.contact.email;
     }
 
     phone() {
-        return this.data.phone;
+        return this.contact.phone;
     }
 }
 
-export class Address {
-    constructor(private data: any) {}
+export class AddressView {
+    constructor(private address: Address) {}
 
     street() {
-        return this.data.street;
+        return this.address.street;
     }
 
     plz() {
-        return this.data.plz;
+        return this.address.plz;
     }
 
     town() {
-        return this.data.town;
+        return this.address.town;
     }
 }

@@ -1,11 +1,13 @@
 import {Db} from "mongodb";
 import {hash} from "bcryptjs";
-import {Company} from "./Company";
+import {CompanyView} from "./Company";
 
 import {UserError} from "graphql-errors";
 import {Mail} from "../Mail";
 import {randomBytes} from "crypto";
 import {promisify} from "util";
+import {Context} from "../Context";
+import {Company} from "../Domain/Company";
 
 
 const doesUserExist = async (db: Db, username: string): Promise<boolean> => {
@@ -69,7 +71,9 @@ Diese Mail wurde automatisch generiert.`
     });
 };
 
-export const registerCompanyResolver = (db: Db, mail: Mail) => async ({input}) => {
+export const registerCompanyResolver = async ({input}, ctx: Context) => {
+    const db = ctx.db.getDatabase();
+
     if(await doesUserExist(db, input.username)) {
         throw new UserError("A user with this username already exists");
     }
@@ -78,12 +82,8 @@ export const registerCompanyResolver = (db: Db, mail: Mail) => async ({input}) =
         throw new UserError("This email does not seem valid");
     }
 
-    const doc = await inputToDoc(input);
+    const company = await ctx.repositoryFactory.getCompanyRepository().create(new Company(await inputToDoc(input)));
+    await sendValidationEmail(ctx.mail, company);
 
-    let result = await db.collection('User').insertOne(doc);
-    let company = await db.collection('User').findOne({_id: result.insertedId});
-
-    await sendValidationEmail(mail, company);
-
-    return new Company(company);
+    return new CompanyView(company);
 };

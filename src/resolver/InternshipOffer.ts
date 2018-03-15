@@ -1,45 +1,41 @@
-import {Db} from "mongodb";
-import {Address, Company, Contact} from "./Company";
-import {CompanyRepository} from "./CompanyRepository";
+import {AddressView, CompanyView, ContactView} from "./Company";
+import {Internship} from "../Domain/Internship";
+import {Context} from "../Context";
 
-export const internshipOfferResolver = async (db: Db, companyRepository: CompanyRepository) => {
-    const internshipOffers = await db.collection('Internships').find({}).toArray();
-    return internshipOffers.map(internshipOffer => {
-        return new InternshipOffer(internshipOffer, companyRepository);
-    });
+export const internshipOfferResolver = async ({}, ctx: Context) => {
+    const internshipOffers = await ctx.repositoryFactory.getInternshipRepository().getAll();
+    return internshipOffers.map(i => new InternshipOffer(i));
 };
 
 export class InternshipOffer {
-    constructor(private  data: any, private companyRepository: CompanyRepository) {
+    constructor(private internship: Internship) {
     }
 
-    async company(): Promise<Company> {
-        return this.companyRepository.getCompanyById(this.data.companyId);
+    async company({}, ctx: Context): Promise<CompanyView> {
+        return new CompanyView(await ctx.repositoryFactory.getCompanyRepository().getCompanyById(this.id()));
     }
 
-    contact(): Contact {
-        return new Contact(this.data.contact);
+    contact(): ContactView {
+        return new ContactView(this.internship.contact);
     }
 
     jobname(): string {
-        return this.data.jobname;
+        return this.internship.jobname;
     }
 
     description(): string {
-        return this.data.description;
+        return this.internship.description;
     }
 
-    location(): Address {
-        return new Address(this.data.location);
+    location(): AddressView {
+        return new AddressView(this.internship.location);
     }
 
     link(): string {
-        return this.data.link;
+        return this.internship.link;
     }
 
     id(): string {
-        return this.data._id;
+        return this.internship.id;
     }
-
-
 }

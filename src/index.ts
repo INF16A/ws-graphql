@@ -1,9 +1,10 @@
 require('dotenv').config();
+import {RepositoryFactory} from "./Domain/repositories/RepositoryFactory";
 import "source-map-support/register";
 import * as express from "express";
 import {Application} from "express";
 import * as graphqlHTTP from "express-graphql";
-import {createRootResolver} from "./resolver/RootResolver";
+import {rootResolver} from "./resolver/RootResolver";
 import {buildSchema} from "graphql";
 import {schemas} from "./schema";
 import {Database} from "./Database";
@@ -14,13 +15,13 @@ import {Mail} from "./Mail";
 import {validationRouter} from "./authentication/emailValidation";
 import * as cors from "cors";
 import {buildContext} from "./Context";
-import {CompanyRepository} from "./resolver/CompanyRepository";
 import bodyParser = require("body-parser");
 
 
 const app: Application = express();
 const db: Database = new Database();
 const mail: Mail = new Mail();
+const repositoryFactory: RepositoryFactory = new RepositoryFactory(db);
 
 (async () => {
     console.log('[Startup] Setting up Database and Mail connection');
@@ -42,9 +43,9 @@ const mail: Mail = new Mail();
     maskErrors(schemas);
     app.use('/graphql', graphqlHTTP(request => ({
         schema: buildSchema(schemas),
-        rootValue: createRootResolver(db.getDatabase(), mail, new CompanyRepository(db.getDatabase())),
+        rootValue: rootResolver,
         graphiql: true,
-        context: buildContext(mail, db, request)
+        context: buildContext(mail, db, request, repositoryFactory)
     })));
 
     app.listen(3000, () => console.log('[Startup] Web API setup complete'));

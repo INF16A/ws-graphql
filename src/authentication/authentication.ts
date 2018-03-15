@@ -17,7 +17,6 @@ export const authenticate: RequestHandler = (req: Request, res: Response, next: 
             handleTokenError(err, res);
             return;
         }
-        console.log(decoded);
         const tokenData = decoded as any;
 
         (req as any).user = decoded;

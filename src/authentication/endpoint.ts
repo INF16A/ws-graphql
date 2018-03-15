@@ -93,7 +93,8 @@ async function validatePassword(user, password, res) {
 function sendToken(user, res) {
     return new Promise((resolve, reject) => {
         sign({
-            username: user.username
+            username: user.username,
+            role: user.role
         }, JWT_SECRET, {
             issuer: 'prakt-graphql',
             subject: user._id.toString(),
