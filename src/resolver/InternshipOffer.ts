@@ -5,17 +5,16 @@ import {CompanyRepository} from "./CompanyRepository";
 export const internshipOfferResolver = async (db: Db, companyRepository: CompanyRepository) => {
     const internshipOffers = await db.collection('Internships').find({}).toArray();
     return internshipOffers.map(internshipOffer => {
-        internshipOffer.company = companyRepository.getCompanyByUsername(internshipOffer.company);
-        return new InternshipOffer(internshipOffer);
+        return new InternshipOffer(internshipOffer, companyRepository);
     });
 };
 
 export class InternshipOffer {
-    constructor(private  data: any) {
+    constructor(private  data: any, private companyRepository: CompanyRepository) {
     }
 
-    company(): Company {
-        return this.data.company;
+    async company(): Promise<Company> {
+        return this.companyRepository.getCompanyById(this.data.companyId);
     }
 
     contact(): Contact {
