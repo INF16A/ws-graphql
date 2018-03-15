@@ -1,0 +1,11 @@
+input InternshipOfferInput {
+    jobname:String,
+    link:String,
+    description:String,
+    addressStreet: String,
+    addressPLZ: String,
+    addressTown: String,
+    contactName: String,
+    contactEmail: String,
+    contactPhone: String
+}

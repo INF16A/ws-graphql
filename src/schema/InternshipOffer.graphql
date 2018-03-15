@@ -1,0 +1,9 @@
+type InternshipOffer {
+    id: String!,
+    jobname:String,
+    link:String,
+    company:Company,
+    location:Address,
+    contact:Contact,
+    description:String
+}
