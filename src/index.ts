@@ -1,6 +1,5 @@
-import {config} from "dotenv";
+require('dotenv').config();
 import "source-map-support/register";
-
 import * as express from "express";
 import {Application} from "express";
 import * as graphqlHTTP from "express-graphql";
@@ -16,9 +15,6 @@ import {validationRouter} from "./authentication/emailValidation";
 import * as cors from "cors";
 import {buildContext} from "./Context";
 import {CompanyRepository} from "./resolver/CompanyRepository";
-
-config();
-
 import bodyParser = require("body-parser");
 
 
