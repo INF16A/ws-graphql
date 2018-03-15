@@ -1,19 +1,16 @@
-import {Db} from "mongodb";
 import {InternshipOffer} from "./InternshipOffer";
-import {CompanyRepository} from "./CompanyRepository";
 import {UserError} from "graphql-errors";
 import {Context} from "../Context";
+import {Internship} from "../Domain/Internship";
 
-export const registerInternshipResolver = (db: Db, repo: CompanyRepository) => async ({input}, ctx) => {
-        console.log("ctx" + JSON.stringify(ctx.user) + " input:" + JSON.stringify(input));
-        if (ctx == null || ctx.user == null || !ctx.user.username) {
+export const registerInternshipResolver = async ({input}, ctx: Context) => {
+        if (ctx.user == null) {
             throw  new UserError("Can't register an internship unauthorized");
         }
-        const company = await repo.getCompanyByUsername(ctx.user.username);
-        if (company === null) {
+
+        if (ctx.user.role !== 'company') {
             throw new UserError("Can't register an internship for a non-existing company");
         }
-        console.log("res" + company);
 
         const doc = {
             description: input.description,
@@ -29,15 +26,12 @@ export const registerInternshipResolver = (db: Db, repo: CompanyRepository) => a
                 phone: input.contactPhone
             },
             link: input.link,
-            companyId: company.id()
+            companyId: ctx.user.sub
         };
-
-        const insertionResult = await
-            db.collection('Internships').insertOne(doc);
-        const internshipOffer = await
-            db.collection('Internships').findOne({_id: insertionResult.insertedId});
-        internshipOffer.companyId = company;
-        return new InternshipOffer(internshipOffer, repo);
+        const internship = await ctx.repositoryFactory
+            .getInternshipRepository()
+            .create(new Internship(doc));
+        return new InternshipOffer(internship);
     }
 ;
 
