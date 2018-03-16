@@ -8,6 +8,10 @@ type Address {
     street: String,
     plz: String,
     town: String,
+    location: Location
+}
+
+type Location {
     lat: Float,
     long: Float
 }

@@ -1,7 +1,8 @@
 import {Company} from "../Domain/Company";
 import {Address} from "../Domain/Address";
 import {Contact} from "../Domain/Contact";
-import {Context} from "../Context";
+import {Context} from "../services/Context";
+import {Location} from "../Domain/Location";
 
 export const companyResolver = async ({}, context: Context) => {
     const companies = await context.repositoryFactory.getCompanyRepository().getAllCompanies();
@@ -61,5 +62,21 @@ export class AddressView {
 
     town() {
         return this.address.town;
+    }
+
+    location() {
+        return new LocationView(this.address.location);
+    }
+}
+
+export class LocationView {
+    constructor(private location: Location) {}
+
+    lat() {
+        return this.location.lat;
+    }
+
+    long() {
+        return this.location.long;
     }
 }

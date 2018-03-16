@@ -1,5 +1,5 @@
 import {Router, Request, Response} from "express";
-import {Database} from "../Database";
+import {Database} from "../services/Database";
 
 export const validationRouter = Router();
 

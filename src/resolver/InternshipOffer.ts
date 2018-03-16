@@ -1,6 +1,6 @@
 import {AddressView, CompanyView, ContactView} from "./Company";
 import {Internship} from "../Domain/Internship";
-import {Context} from "../Context";
+import {Context} from "../services/Context";
 
 export const internshipOfferResolver = async ({}, ctx: Context) => {
     const internshipOffers = await ctx.repositoryFactory.getInternshipRepository().getAll();
@@ -27,8 +27,8 @@ export class InternshipOffer {
         return this.internship.description;
     }
 
-    location(): AddressView {
-        return new AddressView(this.internship.location);
+    address(): AddressView {
+        return new AddressView(this.internship.address);
     }
 
     link(): string {

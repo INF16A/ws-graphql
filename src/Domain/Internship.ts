@@ -5,7 +5,7 @@ export class Internship {
     private _id: string;
     private _jobname: string;
     private _description: string;
-    private _location: Address;
+    private _address: Address;
     private _link: string;
     private _company: string;
     private _contact: Contact;
@@ -14,7 +14,7 @@ export class Internship {
         this._id = data._id;
         this._jobname = data.jobname;
         this._description = data.description;
-        this._location = new Address(data.location);
+        this._address = new Address(data.address);
         this._link = data.link;
         this._contact = new Contact(data.contact);
     }
@@ -25,7 +25,7 @@ export class Internship {
             jobname: this._jobname,
             description: this._description,
             link: this._link,
-            location: this._location.serialize(),
+            address: this.address.serialize(),
             contact: this.contact.serialize()
         };
     }
@@ -54,12 +54,12 @@ export class Internship {
         this._description = value;
     }
 
-    get location(): Address {
-        return this._location;
+    get address(): Address {
+        return this._address;
     }
 
-    set location(value: Address) {
-        this._location = value;
+    set address(value: Address) {
+        this._address = value;
     }
 
     get link(): string {

@@ -3,7 +3,7 @@ type InternshipOffer {
     jobname:String,
     link:String,
     company:Company,
-    location:Address,
+    address:Address,
     contact:Contact,
     description:String
 }

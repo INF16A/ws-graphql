@@ -3,11 +3,12 @@ import {hash} from "bcryptjs";
 import {CompanyView} from "./Company";
 
 import {UserError} from "graphql-errors";
-import {Mail} from "../Mail";
+import {Mail} from "../services/Mail";
 import {randomBytes} from "crypto";
 import {promisify} from "util";
-import {Context} from "../Context";
+import {Context} from "../services/Context";
 import {Company} from "../Domain/Company";
+import {Geocoder} from "../services/Geocoder";
 
 
 const doesUserExist = async (db: Db, username: string): Promise<boolean> => {
@@ -25,7 +26,6 @@ const inputToDoc = async (input) => {
         .toString('base64')
         .replace(/\+/g, '-')
         .replace(/\//g, '_');
-
     return {
         name: input.name,
         role: 'company',
@@ -33,7 +33,11 @@ const inputToDoc = async (input) => {
         address: {
             street: input.addressStreet,
             plz: input.addressPLZ,
-            town: input.addressTown
+            town: input.addressTown,
+            location: {
+                type: "Point",
+                coordinates: null
+            }
         },
         contact: {
             name: input.contactName,
@@ -47,6 +51,14 @@ const inputToDoc = async (input) => {
             token: mailToken
         }
     };
+};
+
+const getLocation = async (geocoder: Geocoder, address: any) => {
+    try {
+        return await geocoder.geocode(`${address.street}, ${address.plz} ${address.town}`);
+    } catch (err) {
+        return null;
+    }
 };
 
 const sendValidationEmail = async (mail: Mail, companyData) => {
@@ -82,7 +94,10 @@ export const registerCompanyResolver = async ({input}, ctx: Context) => {
         throw new UserError("This email does not seem valid");
     }
 
-    const company = await ctx.repositoryFactory.getCompanyRepository().create(new Company(await inputToDoc(input)));
+    const doc = await inputToDoc(input);
+    doc.address.location = await getLocation(ctx.geocoder, doc.address);
+
+    const company = await ctx.repositoryFactory.getCompanyRepository().create(new Company(doc));
     await sendValidationEmail(ctx.mail, company);
 
     return new CompanyView(company);

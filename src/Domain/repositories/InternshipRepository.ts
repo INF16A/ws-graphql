@@ -1,4 +1,4 @@
-import {Database} from "../../Database";
+import {Database} from "../../services/Database";
 import {Internship} from "../Internship";
 import {ObjectID} from "bson";
 

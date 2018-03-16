@@ -43,7 +43,6 @@ export class Mail
                 }
             }
         } else {
-            console.log(process.env);
             return {
                 host: process.env.MAIL_HOST,
                 port: process.env.MAIL_PORT,
