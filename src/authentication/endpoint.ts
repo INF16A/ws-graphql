@@ -1,5 +1,5 @@
 import {Router} from "express";
-import {Database} from "../Database";
+import {Database} from "../services/Database";
 import {sign} from "jsonwebtoken";
 import * as bcrypt from "bcryptjs";
 

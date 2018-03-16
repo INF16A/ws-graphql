@@ -19,7 +19,11 @@ export class Database {
     }
 
     public async setup() {
-        await this.db.collection('User').createIndex({username: 1}, {unique: true});
+        await Promise.all([
+            this.db.collection('User').createIndex({username: 1}, {unique: true}),
+            this.db.collection('User').createIndex({"address.location": "2dsphere"}),
+            this.db.collection('Internships').createIndex({"address.location": "2dsphere"})
+        ]);
     }
 
     public getDatabase(): Db {

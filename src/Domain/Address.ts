@@ -1,14 +1,16 @@
+import {Location} from "./Location";
+
 export class Address {
     private _street: string;
     private _plz: string;
     private _town: string;
-    private _lat: string;
-    private _long: string;
+    private _location: Location;
 
     constructor(data) {
         this.street = data.street;
         this.plz = data.plz;
         this.town = data.town;
+        this.location = new Location(data.location);
     }
 
     get street(): string {
@@ -35,20 +37,12 @@ export class Address {
         this._town = value;
     }
 
-    get lat(): string {
-        return this._lat;
+    get location(): Location {
+        return this._location;
     }
 
-    set lat(value: string) {
-        this._lat = value;
-    }
-
-    get long(): string {
-        return this._long;
-    }
-
-    set long(value: string) {
-        this._long = value;
+    set location(value: Location) {
+        this._location = value;
     }
 
     public serialize(): any {
@@ -56,8 +50,7 @@ export class Address {
             street: this.street,
             plz: this.plz,
             town: this.town,
-            lat: this.lat,
-            long: this.long
+            location: this._location.serialize()
         };
     }
 }

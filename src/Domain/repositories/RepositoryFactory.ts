@@ -1,4 +1,4 @@
-import {Database} from "../../Database";
+import {Database} from "../../services/Database";
 import {CompanyRepository} from "./CompanyRepository";
 import {InternshipRepository} from "./InternshipRepository";
 
