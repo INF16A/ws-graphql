@@ -1,10 +1,26 @@
 import {AddressView, CompanyView, ContactView} from "./Company";
 import {Internship} from "../Domain/Internship";
 import {Context} from "../services/Context";
+import {Location} from "../Domain/Location";
 
-export const internshipOfferResolver = async ({}, ctx: Context) => {
-    const internshipOffers = await ctx.repositoryFactory.getInternshipRepository().getAll();
-    return internshipOffers.map(i => new InternshipOffer(i));
+type InternshipOfferArguments = {
+    near?: {
+        lat: number,
+        long: number
+    },
+    distance?: number
+};
+
+export const internshipOfferResolver = async (args: InternshipOfferArguments, ctx: Context) => {
+    const repository = ctx.repositoryFactory.getInternshipRepository();
+    let internships: Internship[] = [];
+    if("near" in args && "distance" in args) {
+        internships = await repository.getNear(Location.fromLatLong(args.near.lat, args.near.long), args.distance);
+    } else {
+        internships = await repository.getAll();
+    }
+
+    return internships.map(i => new InternshipOffer(i));
 };
 
 export class InternshipOffer {

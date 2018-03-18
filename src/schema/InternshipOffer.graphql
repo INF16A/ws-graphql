@@ -7,3 +7,8 @@ type InternshipOffer {
     contact:Contact,
     description:String
 }
+
+input LocationInput {
+    lat: Float!,
+    long: Float!
+}

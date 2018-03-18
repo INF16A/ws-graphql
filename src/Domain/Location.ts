@@ -9,6 +9,10 @@ export class Location
         this._long = point.coordinates[1];
     }
 
+    public static fromLatLong(lat: number, long: number): Location {
+        return new Location({type: "Point", coordinates: [lat, long]});
+    }
+
     get lat(): number {
         return this._lat;
     }
