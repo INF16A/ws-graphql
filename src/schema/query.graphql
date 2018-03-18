@@ -1,5 +1,5 @@
 type Query {
     hello: Greeting,
     companies: [Company],
-    internshipOffers(near: LocationInput, distance: Int):[InternshipOffer]
+    internshipOffers(near: LocationInput, distance: Int, id: String):[InternshipOffer]
 }
