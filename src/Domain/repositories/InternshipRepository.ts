@@ -15,7 +15,7 @@ export class InternshipRepository {
     }
 
     public async getById(id: string | ObjectID): Promise<Internship> {
-        if(typeof id === 'string') {
+        if (typeof id === 'string') {
             id = new ObjectID(id);
         }
         const data = await this.db
@@ -26,6 +26,11 @@ export class InternshipRepository {
         if (data === null)
             return null;
         return new Internship(data);
+    }
+
+    public async remove(internship: Internship): Promise<Boolean> {
+        const result = await this.db.getDatabase().collection(this.INTERNSHIP_COLLECTION).deleteOne({_id: internship.id});
+        return result.result.ok === 1;
     }
 
     public async persist(internship: Internship): Promise<Internship> {

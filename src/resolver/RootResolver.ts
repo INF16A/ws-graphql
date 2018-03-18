@@ -3,6 +3,7 @@ import {companyResolver} from "./Company";
 import {registerCompanyResolver} from "./RegisterCompany";
 import {internshipOfferResolver} from "./InternshipOffer";
 import {registerInternshipResolver} from "./RegisterInternship";
+import {deleteInternship} from "./DeleteInternshipOffer";
 
 export const rootResolver = {
     hello: (args, ctx) => new Greeting(ctx),
@@ -10,4 +11,5 @@ export const rootResolver = {
     registerCompany: registerCompanyResolver,
     registerInternshipOffer: registerInternshipResolver,
     internshipOffers: internshipOfferResolver,
+    deleteInternshipOffer:deleteInternship
 };

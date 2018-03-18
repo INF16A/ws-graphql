@@ -1,0 +1,6 @@
+input DeleteInternshipOffer {
+    id: String!
+}
+type DeleteInternshipOfferResult{
+    id:String!
+}
