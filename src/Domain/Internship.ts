@@ -17,16 +17,18 @@ export class Internship {
         this._address = new Address(data.address);
         this._link = data.link;
         this._contact = new Contact(data.contact);
+        this._company = data.companyId;
     }
 
     public serialize(): any {
         return {
-            id: this._id,
+            _id: this._id,
             jobname: this._jobname,
             description: this._description,
             link: this._link,
             address: this.address.serialize(),
-            contact: this.contact.serialize()
+            contact: this.contact.serialize(),
+            companyId: this._company
         };
     }
 
