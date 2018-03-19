@@ -1,9 +1,6 @@
 import {Context} from "../services/Context";
 import {UserError} from "graphql-errors";
 
-type DeleteInternshipOffer = {
-    id: string;
-}
 export const deleteInternship = async ({input}, ctx: Context) => {
     if (ctx.user == null) {
         throw  new UserError("Can't register an internship unauthorized");
@@ -14,15 +11,12 @@ export const deleteInternship = async ({input}, ctx: Context) => {
     }
     console.log(input);
     const internshipRepository = ctx.repositoryFactory.getInternshipRepository();
-    const internship = await internshipRepository.getById(input.id);
+    const internship = await internshipRepository.getById(input);
     console.log(internship);
     if (internship === null) {
         throw new UserError("Can't delete a not existing internship");
     }
 
-    return {
-        id: internship.id,
-        ok: await internshipRepository.remove(internship)
-    };
+    return await internshipRepository.remove(internship);
 
 };
