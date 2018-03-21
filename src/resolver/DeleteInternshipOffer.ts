@@ -3,7 +3,7 @@ import {UserError} from "graphql-errors";
 
 export const deleteInternship = async ({input}, ctx: Context) => {
     if (ctx.user == null) {
-        throw  new UserError("Can't register an internship unauthorized");
+        throw  new UserError("Can't delete an internship unauthorized");
     }
 
     if (ctx.user.role !== 'company') {
