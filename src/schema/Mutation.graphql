@@ -1,4 +1,5 @@
 type Mutation {
     registerCompany(input: CompanyInput): Company
     registerInternshipOffer(input:InternshipOfferInput):InternshipOffer
+    deleteInternshipOffer(input:String):Boolean
 }
