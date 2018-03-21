@@ -15,9 +15,7 @@ export const deleteInternship = async ({input}, ctx: Context) => {
     if (internship === null) {
         throw new UserError("Can't delete a not existing internship");
     }
-    const companyRepository = ctx.repositoryFactory.getCompanyRepository();
-    const company = await companyRepository.getCompanyByUsername(ctx.user.username);
-    if (company.id !== internship.company) {
+    if (ctx.user.sub !== internship.company) {
         throw new UserError("Can't delete an internship of a different company.");
     }
 
