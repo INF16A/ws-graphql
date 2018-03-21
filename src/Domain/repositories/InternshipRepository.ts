@@ -29,8 +29,8 @@ export class InternshipRepository {
     }
 
     public async remove(internship: Internship): Promise<Boolean> {
-        const result = await this.db.getDatabase().collection(this.INTERNSHIP_COLLECTION).deleteOne({_id: internship.id});
-        return result.result.ok === 1;
+        const {result: {ok}} = await this.db.getDatabase().collection(this.INTERNSHIP_COLLECTION).deleteOne({_id: internship.id});
+        return ok === 1;
     }
 
     public async persist(internship: Internship): Promise<Internship> {
