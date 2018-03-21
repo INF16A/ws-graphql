@@ -12,6 +12,9 @@ export class CompanyRepository {
     }
 
     public async getCompanyById(id: string | ObjectID): Promise<Company> {
+        if(typeof id === 'string') {
+            id = new ObjectID(id);
+        }
         const data = await this.db
             .getDatabase()
             .collection('User')

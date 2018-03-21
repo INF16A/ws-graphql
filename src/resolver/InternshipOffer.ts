@@ -33,7 +33,7 @@ export class InternshipOffer {
     }
 
     async company({}, ctx: Context): Promise<CompanyView> {
-        return new CompanyView(await ctx.repositoryFactory.getCompanyRepository().getCompanyById(this.id()));
+        return new CompanyView(await ctx.repositoryFactory.getCompanyRepository().getCompanyById(this.internship.company));
     }
 
     contact(): ContactView {
